@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EVA — Global Ethical Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest-deep: #071a0e;
+  --forest-dark: #0d2418;
+  --forest-mid: #163420;
+  --forest: #1a4028;
+  --moss: #2d6a45;
+  --moss-light: #3d8a5a;
+  --sage: #6ba882;
+  --sage-light: #9ecfb0;
+  --mint: #b8edc8;
+  --teal: #3dd68c;
+  --purple: #c084fc;
+  --gold: #fbbf24;
+  --white: #ffffff;
+  --offwhite: rgba(255,255,255,0.92);
+  --glass-heavy: rgba(8,32,16,0.55);
+  --glass-light: rgba(255,255,255,0.08);
+  --glass-border: rgba(255,255,255,0.18);
+  --glass-border-strong: rgba(255,255,255,0.28);
+  --text-bright: rgba(255,255,255,0.95);
+  --text-mid: rgba(255,255,255,0.65);
+  --text-dim: rgba(255,255,255,0.38);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--forest-deep);
+  color: var(--text-bright);
+  overflow-x: hidden;
+  transition: filter 2.5s ease;
+}
+body.eco-warn { filter: saturate(0.5) brightness(0.85); }
+body.eco-dim  { filter: grayscale(60%) brightness(0.65); }
+
+/* ── BOTANICAL BACKGROUND SYSTEM ── */
+.bg-foliage {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: var(--forest-deep);
+  overflow: hidden;
+}
+.bg-foliage::before {
+  content: '';
+  position: absolute; inset: -20%;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(45,106,69,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 90% 10%, rgba(22,52,32,0.6) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 50% at 50% 80%, rgba(13,36,24,0.8) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 100% at 30% 50%, rgba(7,26,14,0.9) 0%, transparent 80%);
+}
+
+/* SVG leaf layer */
+.leaf-layer {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  overflow: hidden;
+}
+.leaf-layer svg { width: 100%; height: 100%; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 48px;
+  background: rgba(7,26,14,0.4);
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border-bottom: 0.5px solid var(--glass-border);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 600;
+  color: var(--white); letter-spacing: 0.05em;
+}
+.nav-logo-icon {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: rgba(255,255,255,0.1);
+  border: 0.5px solid var(--glass-border-strong);
+  display: grid; place-items: center;
+  backdrop-filter: blur(10px);
+}
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a {
+  text-decoration: none; font-size: 0.8rem; font-weight: 400;
+  color: var(--text-mid); transition: color 0.2s; letter-spacing: 0.04em;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-token-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.08);
+  border: 0.5px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  border-radius: 999px; padding: 6px 14px;
+  font-size: 0.75rem; font-weight: 500; color: var(--text-mid);
+  cursor: pointer; transition: all 0.2s;
+}
+.nav-token-pill:hover { background: rgba(255,255,255,0.14); color: var(--white); }
+.gem-icon { color: var(--gold); font-size: 0.8rem; }
+.nav-cta {
+  background: rgba(255,255,255,0.9); color: var(--forest-deep);
+  border: none; border-radius: 999px;
+  padding: 8px 22px; font-size: 0.8rem; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+  font-family: 'Inter', sans-serif; letter-spacing: 0.02em;
+}
+.nav-cta:hover { background: var(--white); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(255,255,255,0.2); }
+
+/* ── HERO ── */
+#hero {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding-top: 80px; z-index: 10;
+  overflow: hidden;
+}
+
+/* PORTAL CUTOUT — the "clear window" effect */
+.hero-portal-wrap {
+  position: absolute; left: 5%; top: 50%; transform: translateY(-50%);
+  width: 320px; height: 420px; z-index: 5;
+  border-radius: 160px 160px 120px 120px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.hero-portal-inner {
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(ellipse 120% 80% at 60% 40%, rgba(45,106,69,0.8) 0%, rgba(22,52,32,0.95) 100%);
+  position: relative; overflow: hidden;
+}
+.hero-portal-inner svg { width: 100%; height: 100%; position: absolute; inset: 0; }
+
+.hero-content {
+  position: relative; z-index: 10;
+  text-align: center; max-width: 680px;
+  padding: 0 24px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(16px);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 999px; padding: 6px 18px;
+  font-size: 0.72rem; font-weight: 400; color: var(--sage-light);
+  margin-bottom: 24px; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.hero-badge-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--teal); animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.4;transform:scale(1.6);}
+}
+.hero-h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.2rem, 7vw, 6rem);
+  font-weight: 300; line-height: 1.05;
+  color: var(--white); letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.hero-h1 em { font-style: italic; font-weight: 300; color: var(--mint); }
+.hero-sub {
+  font-size: 0.95rem; color: var(--text-mid);
+  font-weight: 300; margin-bottom: 36px;
+  max-width: 440px; margin-left: auto; margin-right: auto;
+  line-height: 1.7; letter-spacing: 0.01em;
+}
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: rgba(255,255,255,0.9); color: var(--forest-deep);
+  border: none; border-radius: 999px;
+  padding: 13px 30px; font-size: 0.875rem; font-weight: 500;
+  cursor: pointer; transition: all 0.25s;
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 2px 8px rgba(255,255,255,0.15);
+}
+.btn-primary:hover { background: var(--white); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(0,0,0,0.35); }
+.btn-secondary {
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(20px);
+  border: 0.5px solid var(--glass-border-strong);
+  color: var(--text-bright); border-radius: 999px;
+  padding: 13px 30px; font-size: 0.875rem; font-weight: 400;
+  cursor: pointer; transition: all 0.25s;
+  font-family: 'Inter', sans-serif; letter-spacing: 0.02em;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.14); transform: translateY(-2px); }
+
+.trust-strip {
+  position: absolute; bottom: 40px; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: center;
+  gap: 40px; flex-wrap: wrap; padding: 0 48px;
+  z-index: 10;
+}
+.trust-label { font-size: 0.68rem; color: var(--text-dim); letter-spacing: 0.12em; text-transform: uppercase; }
+.trust-logos { display: flex; gap: 32px; align-items: center; }
+.trust-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem; color: rgba(255,255,255,0.3);
+  letter-spacing: 0.06em; font-weight: 400;
+  transition: color 0.2s;
+}
+.trust-logo:hover { color: rgba(255,255,255,0.6); }
+
+/* ── GLASS CARD BASE ── */
+.glass-card {
+  background: rgba(8,28,16,0.45);
+  backdrop-filter: blur(40px) saturate(1.5);
+  -webkit-backdrop-filter: blur(40px) saturate(1.5);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.2);
+}
+
+/* ── SECTION SHARED ── */
+section { position: relative; z-index: 10; }
+.section-label {
+  display: inline-block;
+  font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 12px;
+}
+.section-h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300; line-height: 1.1;
+  color: var(--white); letter-spacing: -0.01em;
+  margin-bottom: 14px;
+}
+.section-h2 em { font-style: italic; color: var(--mint); }
+.section-p {
+  font-size: 0.9rem; color: var(--text-mid);
+  font-weight: 300; line-height: 1.75; max-width: 500px;
+}
+
+/* ── WORKSPACE ── */
+#workspace { padding: 100px 48px; }
+.workspace-inner { max-width: 1200px; margin: 0 auto; }
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 210px;
+  gap: 16px; align-items: start;
+}
+
+.layer-panel { padding: 22px; }
+.layer-title {
+  font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 18px; font-weight: 500;
+}
+.layer-item {
+  padding: 13px 15px; border-radius: 12px;
+  margin-bottom: 8px; cursor: pointer;
+  transition: all 0.2s; border: 0.5px solid transparent;
+}
+.layer-item:hover { background: rgba(255,255,255,0.06); border-color: var(--glass-border); }
+.layer-item.active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.22); }
+.li-num {
+  font-size: 0.62rem; font-weight: 500; letter-spacing: 0.1em;
+  color: var(--sage); margin-bottom: 3px; text-transform: uppercase;
+}
+.layer-item.active .li-num { color: var(--mint); }
+.li-name { font-size: 0.85rem; font-weight: 500; color: var(--text-mid); margin-bottom: 2px; }
+.layer-item.active .li-name { color: var(--white); }
+.li-desc { font-size: 0.72rem; color: var(--text-dim); font-weight: 300; }
+.layer-item.active .li-desc { color: rgba(255,255,255,0.5); }
+
+.eco-block {
+  margin-top: 16px; padding: 13px 15px;
+  background: rgba(255,255,255,0.04); border-radius: 12px;
+  border: 0.5px solid rgba(255,255,255,0.08);
+}
+.eco-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.eco-lbl { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); font-weight: 500; }
+.eco-status-text { font-size: 0.72rem; font-weight: 600; transition: color 0.5s; }
+.eco-track { height: 3px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; }
+.eco-fill {
+  height: 100%; width: 0%; border-radius: 99px;
+  background: var(--teal); transition: width 0.8s ease, background 0.8s ease;
+}
+
+/* CENTER: Chat */
+.chat-panel { display: flex; flex-direction: column; overflow: hidden; }
+.chat-topbar {
+  padding: 16px 22px; border-bottom: 0.5px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.chat-title-row { display: flex; align-items: center; gap: 10px; }
+.eva-orb {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--teal), var(--purple), #38bdf8, var(--teal));
+  animation: spin-orb 6s linear infinite;
+  box-shadow: 0 0 16px rgba(61,214,140,0.4);
+}
+@keyframes spin-orb { to { transform: rotate(360deg); } }
+.chat-eva-name { font-size: 0.875rem; font-weight: 500; color: var(--white); }
+.chat-mode-badge {
+  font-size: 0.65rem; padding: 4px 10px; border-radius: 999px;
+  background: rgba(61,214,140,0.1); color: var(--teal); font-weight: 500;
+  border: 0.5px solid rgba(61,214,140,0.2); letter-spacing: 0.04em;
+}
+.chat-msgs {
+  flex: 1; overflow-y: auto; padding: 18px 22px;
+  display: flex; flex-direction: column; gap: 12px;
+  min-height: 300px; max-height: 360px;
+}
+.chat-msgs::-webkit-scrollbar { width: 3px; }
+.chat-msgs::-webkit-scrollbar-track { background: transparent; }
+.chat-msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+
+.msg { display: flex; gap: 9px; animation: msg-in 0.3s ease; }
+@keyframes msg-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+.msg.user { flex-direction: row-reverse; }
+.msg-avatar {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  display: grid; place-items: center; font-size: 0.6rem; font-weight: 700;
+}
+.msg.eva .msg-avatar { background: rgba(61,214,140,0.15); color: var(--teal); border: 0.5px solid rgba(61,214,140,0.3); }
+.msg.user .msg-avatar { background: rgba(192,132,252,0.15); color: var(--purple); border: 0.5px solid rgba(192,132,252,0.3); }
+.msg-bubble {
+  max-width: 75%; padding: 10px 14px; border-radius: 14px;
+  font-size: 0.82rem; line-height: 1.6; font-weight: 300;
+}
+.msg.eva .msg-bubble {
+  background: rgba(255,255,255,0.06); color: var(--text-bright);
+  border: 0.5px solid rgba(255,255,255,0.1); border-bottom-left-radius: 4px;
+}
+.msg.user .msg-bubble {
+  background: rgba(255,255,255,0.12); color: var(--white);
+  border: 0.5px solid rgba(255,255,255,0.2); border-bottom-right-radius: 4px;
+}
+
+.bias-alert {
+  margin: 0 16px; padding: 13px 15px; border-radius: 12px;
+  background: rgba(192,132,252,0.08);
+  border: 0.5px solid rgba(192,132,252,0.25);
+  animation: bias-pulse 1.5s ease 3; display: none;
+}
+.bias-alert.show { display: block; }
+@keyframes bias-pulse {
+  0%,100%{background:rgba(192,132,252,0.08);}
+  50%{background:rgba(192,132,252,0.16);}
+}
+.bias-alert-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.bias-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--purple); }
+.bias-lbl { font-size: 0.75rem; font-weight: 600; color: var(--purple); }
+.bias-phrase { font-size: 0.78rem; color: var(--text-mid); margin-bottom: 9px; font-style: italic; font-weight: 300; }
+.bias-submit-btn {
+  font-size: 0.72rem; font-weight: 500; padding: 6px 13px; border-radius: 999px;
+  border: 0.5px solid rgba(192,132,252,0.35); background: rgba(192,132,252,0.08); color: var(--purple);
+  cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; letter-spacing: 0.02em;
+}
+.bias-submit-btn:hover { background: rgba(192,132,252,0.18); }
+
+.socratic-panel {
+  margin: 0 16px 8px; padding: 14px; border-radius: 12px;
+  background: rgba(61,214,140,0.05); border: 0.5px solid rgba(61,214,140,0.18); display: none;
+}
+.socratic-panel.show { display: block; }
+.soc-title { font-size: 0.72rem; font-weight: 600; color: var(--teal); margin-bottom: 10px; letter-spacing: 0.04em; }
+.soc-step { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; border-bottom: 0.5px solid rgba(61,214,140,0.08); }
+.soc-step:last-child { border-bottom: none; }
+.soc-num {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(61,214,140,0.12); color: var(--teal);
+  font-size: 0.62rem; font-weight: 700; display: grid; place-items: center; flex-shrink: 0;
+}
+.soc-text { font-size: 0.76rem; color: var(--text-mid); font-weight: 300; line-height: 1.5; }
+
+.chat-input-row {
+  padding: 14px 18px; border-top: 0.5px solid rgba(255,255,255,0.08);
+  display: flex; gap: 9px; align-items: center;
+}
+.chat-input {
+  flex: 1; background: rgba(255,255,255,0.06);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: 999px; padding: 9px 17px;
+  font-size: 0.82rem; color: var(--white);
+  outline: none; transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.chat-input::placeholder { color: var(--text-dim); }
+.chat-input:focus {
+  background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.04);
+}
+.chat-send-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,0.12); border: 0.5px solid rgba(255,255,255,0.2);
+  cursor: pointer; display: grid; place-items: center; transition: all 0.2s; flex-shrink: 0;
+}
+.chat-send-btn:hover { background: rgba(255,255,255,0.22); transform: scale(1.05); }
+.chat-send-btn svg { width: 14px; height: 14px; }
+
+/* Tokens */
+.token-panel { padding: 18px; }
+.tp-title { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 14px; font-weight: 500; }
+.token-count-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; }
+.token-big { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300; color: var(--white); line-height: 1; }
+.token-unit { font-size: 0.72rem; color: var(--text-dim); }
+.token-gems { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.gem {
+  width: 18px; height: 18px;
+  background: conic-gradient(from 0deg, #fbbf24, #f59e0b, #fbbf24);
+  border-radius: 3px; transform: rotate(45deg);
+  box-shadow: 0 0 8px rgba(251,191,36,0.5);
+  animation: gem-glow 2s ease-in-out infinite alternate;
+}
+@keyframes gem-glow {
+  from { box-shadow: 0 0 5px rgba(251,191,36,0.3); }
+  to   { box-shadow: 0 0 12px rgba(251,191,36,0.7); }
+}
+.token-log { margin-top: 4px; }
+.tl-item {
+  font-size: 0.68rem; color: var(--text-dim);
+  padding: 5px 0; border-bottom: 0.5px solid rgba(255,255,255,0.05);
+  font-weight: 300; line-height: 1.4;
+}
+.tl-item:last-child { border-bottom: none; }
+.tl-pts { font-weight: 600; color: var(--teal); }
+
+/* ── COMMUNITY ── */
+#community {
+  padding: 100px 48px;
+  background: rgba(5,18,10,0.6);
+}
+.community-inner { max-width: 1200px; margin: 0 auto; }
+.stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 40px 0; }
+.stat-card { padding: 26px; border-radius: 18px; text-align: center; }
+.stat-val { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300; color: var(--white); line-height: 1; margin-bottom: 6px; }
+.stat-lbl { font-size: 0.75rem; color: var(--text-dim); font-weight: 400; letter-spacing: 0.04em; }
+.stat-change { font-size: 0.68rem; color: var(--teal); margin-top: 6px; font-weight: 500; }
+
+.library-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 28px; }
+.lib-card { padding: 20px; border-radius: 14px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+.lib-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
+.lib-tag { display: inline-block; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; font-weight: 600; margin-bottom: 9px; }
+.lib-tag.bias { background: rgba(192,132,252,0.12); color: var(--purple); border: 0.5px solid rgba(192,132,252,0.25); }
+.lib-tag.eco  { background: rgba(61,214,140,0.1); color: var(--teal); border: 0.5px solid rgba(61,214,140,0.2); }
+.lib-tag.ethic{ background: rgba(56,189,248,0.1); color: #38bdf8; border: 0.5px solid rgba(56,189,248,0.2); }
+.lib-h { font-size: 0.85rem; font-weight: 500; color: var(--text-bright); margin-bottom: 6px; line-height: 1.4; }
+.lib-p { font-size: 0.75rem; color: var(--text-mid); font-weight: 300; line-height: 1.6; }
+.lib-meta { margin-top: 11px; display: flex; justify-content: space-between; align-items: center; }
+.lib-author { font-size: 0.66rem; color: var(--text-dim); }
+.lib-likes { font-size: 0.66rem; color: var(--sage); font-weight: 500; }
+
+.misconceptions-board {
+  margin-top: 36px; padding: 22px; border-radius: 18px;
+  background: rgba(192,132,252,0.04); border: 0.5px solid rgba(192,132,252,0.14);
+}
+.mb-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 400; color: var(--white); margin-bottom: 3px; }
+.mb-sub { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 14px; font-weight: 300; }
+.mb-items { display: flex; flex-wrap: wrap; gap: 7px; min-height: 28px; }
+.mb-tag {
+  padding: 5px 12px; border-radius: 999px;
+  background: rgba(192,132,252,0.08); color: rgba(192,132,252,0.9);
+  font-size: 0.72rem; border: 0.5px solid rgba(192,132,252,0.2);
+  animation: tag-in 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes tag-in { from{opacity:0;transform:scale(0.7);}to{opacity:1;transform:scale(1);} }
+.mb-empty { font-size: 0.76rem; color: var(--text-dim); font-style: italic; font-weight: 300; }
+
+.leaderboard { margin-top: 40px; }
+.lb-item {
+  display: flex; align-items: center; gap: 12px; padding: 13px 18px;
+  border-radius: 12px; margin-bottom: 7px;
+  background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.08);
+  transition: transform 0.15s, background 0.15s;
+}
+.lb-item:hover { transform: translateX(4px); background: rgba(255,255,255,0.07); }
+.lb-item.top1 { background: rgba(251,191,36,0.05); border-color: rgba(251,191,36,0.18); }
+.lb-rank { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 400; color: var(--text-dim); width: 22px; }
+.lb-item.top1 .lb-rank { color: var(--gold); }
+.lb-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 0.5px solid rgba(255,255,255,0.15); color: var(--text-mid); font-size: 0.68rem; font-weight: 600; display: grid; place-items: center; }
+.lb-info { flex: 1; }
+.lb-name { font-size: 0.82rem; font-weight: 500; color: var(--text-bright); }
+.lb-detail { font-size: 0.68rem; color: var(--text-dim); font-weight: 300; }
+.lb-score-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.lb-score { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 400; color: var(--white); }
+.lb-bar-wrap { width: 72px; height: 3px; background: rgba(255,255,255,0.07); border-radius: 99px; overflow: hidden; }
+.lb-bar { height: 100%; background: var(--teal); border-radius: 99px; }
+
+/* ── TEACHER ── */
+#teacher { padding: 100px 48px; }
+.teacher-inner { max-width: 1200px; margin: 0 auto; }
+.teacher-lock { max-width: 400px; margin: 44px auto 0; text-align: center; }
+.lock-icon-wrap { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.12); margin: 0 auto 14px; display: grid; place-items: center; }
+.lock-label { font-size: 0.76rem; color: var(--text-dim); margin-bottom: 10px; letter-spacing: 0.04em; }
+.lock-input {
+  width: 100%; padding: 11px 18px; border-radius: 12px;
+  border: 0.5px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.06);
+  color: var(--white); font-size: 0.85rem; outline: none;
+  text-align: center; letter-spacing: 0.2em; transition: all 0.2s;
+  font-family: 'Inter', sans-serif; margin-bottom: 10px;
+}
+.lock-input::placeholder { color: var(--text-dim); letter-spacing: 0.04em; }
+.lock-input:focus { border-color: rgba(255,255,255,0.3); box-shadow: 0 0 0 3px rgba(255,255,255,0.05); background: rgba(255,255,255,0.09); }
+.lock-hint { font-size: 0.68rem; color: var(--text-dim); font-style: italic; }
+.teacher-dash { display: none; }
+.teacher-dash.show { display: block; }
+.dash-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin: 28px 0; }
+.dash-stat { padding: 18px; border-radius: 14px; text-align: center; }
+.ds-val { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--white); }
+.ds-lbl { font-size: 0.68rem; color: var(--text-dim); margin-top: 4px; font-weight: 400; letter-spacing: 0.04em; }
+.heatmap-wrap { padding: 26px; border-radius: 18px; }
+.hm-title { font-size: 0.85rem; font-weight: 500; color: var(--text-mid); margin-bottom: 16px; }
+.hm-grid { display: grid; grid-template-columns: 100px repeat(5,1fr); gap: 5px; }
+.hm-cell { padding: 9px 6px; border-radius: 8px; text-align: center; font-size: 0.65rem; font-weight: 400; transition: transform 0.15s; cursor: default; }
+.hm-cell:hover { transform: scale(1.06); }
+.hm-label { background: transparent; font-weight: 500; color: var(--text-mid); display: flex; align-items: center; font-size: 0.72rem; }
+.hm-header { background: transparent; color: var(--text-dim); font-weight: 500; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; display: grid; place-items: center; }
+.hm-l1 { background: rgba(61,214,140,0.08); color: rgba(61,214,140,0.8); }
+.hm-l2 { background: rgba(61,214,140,0.16); color: var(--teal); }
+.hm-l3 { background: rgba(251,191,36,0.12); color: #fbbf24; }
+.hm-l4 { background: rgba(239,68,68,0.1); color: #f87171; }
+.hm-l5 { background: rgba(239,68,68,0.22); color: #ef4444; }
+
+/* ── FOOTER ── */
+footer { position: relative; overflow: hidden; padding: 80px 48px 40px; z-index: 10; }
+.footer-bg { position: absolute; inset: 0; background: rgba(4,12,8,0.85); backdrop-filter: blur(20px); }
+.footer-hills { position: absolute; bottom: 0; left: 0; right: 0; height: 60%; pointer-events: none; }
+.footer-hills svg { width: 100%; height: 100%; }
+.footer-content { position: relative; z-index: 10; max-width: 1200px; margin: 0 auto; }
+.footer-top { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 44px; border-bottom: 0.5px solid rgba(255,255,255,0.08); margin-bottom: 44px; }
+.footer-brand { max-width: 260px; }
+.footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--white); margin-bottom: 10px; letter-spacing: 0.06em; }
+.footer-tagline { font-size: 0.8rem; color: var(--text-dim); font-weight: 300; line-height: 1.7; }
+.footer-cols { display: flex; gap: 56px; }
+.footer-col-title { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); font-weight: 500; margin-bottom: 14px; }
+.footer-col a { display: block; text-decoration: none; font-size: 0.8rem; color: rgba(255,255,255,0.4); font-weight: 300; margin-bottom: 9px; transition: color 0.2s; }
+.footer-col a:hover { color: rgba(255,255,255,0.8); }
+.sdg-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 40px; align-items: center; }
+.sdg-card { padding: 10px 16px; border-radius: 11px; display: flex; align-items: center; gap: 9px; border: 0.5px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); cursor: pointer; transition: all 0.3s; }
+.sdg-card:hover { border-color: var(--sdg-col); box-shadow: 0 0 18px var(--sdg-glow); transform: translateY(-2px); }
+.sdg-num { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; line-height: 1; }
+.sdg-text { font-size: 0.66rem; font-weight: 400; opacity: 0.7; max-width: 76px; line-height: 1.35; }
+.sdg4 { --sdg-col: #e07a84; --sdg-glow: rgba(197,25,45,0.25); color: #e07a84; }
+.sdg5 { --sdg-col: #ff9585; --sdg-glow: rgba(255,58,33,0.25); color: #ff9585; }
+.sdg12{ --sdg-col: #e2b96a; --sdg-glow: rgba(191,139,46,0.25); color: #e2b96a; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+.footer-copy { font-size: 0.7rem; color: var(--text-dim); font-weight: 300; }
+.footer-privacy a { color: var(--text-dim); text-decoration: none; margin-left: 18px; font-size: 0.7rem; transition: color 0.2s; }
+.footer-privacy a:hover { color: rgba(255,255,255,0.7); }
+
+/* ── ECO BANNER ── */
+#eco-banner {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  z-index: 500; min-width: 320px; max-width: 460px;
+  padding: 13px 18px; border-radius: 12px;
+  backdrop-filter: blur(24px); border: 0.5px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; gap: 11px;
+  font-size: 0.78rem; font-weight: 400;
+  opacity: 0; transition: all 0.5s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none;
+}
+#eco-banner.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+#eco-banner.warn { background: rgba(251,191,36,0.12); color: rgba(251,191,36,0.9); }
+#eco-banner.crit { background: rgba(239,68,68,0.12); color: rgba(239,68,68,0.9); }
+.eco-banner-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.warn .eco-banner-dot { background: #fbbf24; }
+.crit .eco-banner-dot { background: #ef4444; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(4,14,8,0.7); backdrop-filter: blur(12px);
+  display: grid; place-items: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.modal-overlay.show { opacity: 1; pointer-events: auto; }
+.modal-box {
+  background: rgba(10,28,18,0.9);
+  backdrop-filter: blur(40px);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 22px; padding: 34px; max-width: 420px; width: 90%;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+  transform: translateY(16px) scale(0.97); transition: all 0.3s;
+}
+.modal-overlay.show .modal-box { transform: none; }
+.modal-icon { width: 44px; height: 44px; border-radius: 50%; background: rgba(192,132,252,0.1); border: 0.5px solid rgba(192,132,252,0.25); margin-bottom: 18px; display: grid; place-items: center; }
+.modal-h { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--white); margin-bottom: 8px; }
+.modal-p { font-size: 0.82rem; color: var(--text-mid); font-weight: 300; line-height: 1.6; margin-bottom: 8px; }
+.modal-phrase { font-style: italic; font-size: 0.82rem; color: var(--purple); background: rgba(192,132,252,0.06); padding: 10px 13px; border-radius: 9px; border-left: 1.5px solid rgba(192,132,252,0.4); margin-bottom: 22px; font-weight: 300; }
+.modal-btns { display: flex; gap: 9px; }
+.modal-confirm { flex: 1; background: rgba(255,255,255,0.9); color: var(--forest-deep); border: none; border-radius: 999px; padding: 11px; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+.modal-confirm:hover { background: var(--white); }
+.modal-cancel { flex: 1; background: transparent; color: var(--text-mid); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 999px; padding: 11px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif; }
+.modal-cancel:hover { background: rgba(255,255,255,0.06); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+
+@media(max-width:900px){
+  .workspace-grid { grid-template-columns: 1fr; }
+  .stats-grid, .library-grid, .dash-stats { grid-template-columns: 1fr 1fr; }
+  nav { padding: 12px 20px; }
+  .nav-links { display: none; }
+  .hero-portal-wrap { display: none; }
+  .footer-top { flex-direction: column; gap: 28px; }
+  .footer-cols { gap: 28px; flex-wrap: wrap; }
+  #workspace, #community, #teacher, footer { padding-left: 20px; padding-right: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- DEEP FOREST BACKGROUND LAYER -->
+<div class="bg-foliage"></div>
+
+<!-- BOTANICAL SVG LEAF LAYER -->
+<div class="leaf-layer">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="leafGlow1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#2d6a45" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#0d2418" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="leafGlow2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#1a4028" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#071a0e" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="leafBlur"><feGaussianBlur stdDeviation="2"/></filter>
+      <filter id="leafSoftBlur"><feGaussianBlur stdDeviation="6"/></filter>
+    </defs>
+
+    <!-- Background ambient glow -->
+    <ellipse cx="200" cy="300" rx="400" ry="350" fill="url(#leafGlow1)" opacity="0.5"/>
+    <ellipse cx="1300" cy="200" rx="350" ry="300" fill="url(#leafGlow2)" opacity="0.7"/>
+    <ellipse cx="800" cy="700" rx="500" ry="300" fill="url(#leafGlow1)" opacity="0.3"/>
+
+    <!-- Large background leaves (blurred) -->
+    <g filter="url(#leafSoftBlur)" opacity="0.35">
+      <path d="M-80 100 C50 20 200 80 180 240 C160 400 20 380 -80 100Z" fill="#2d6a45"/>
+      <path d="M1320 -50 C1460 60 1500 220 1380 300 C1260 380 1180 260 1320 -50Z" fill="#1a4028"/>
+      <path d="M100 700 C200 580 380 620 400 780 C420 940 240 920 100 700Z" fill="#3d8a5a"/>
+      <path d="M1100 600 C1280 560 1380 720 1280 840 C1180 960 1040 860 1100 600Z" fill="#2d6a45"/>
+      <path d="M600 -20 C750 30 800 160 700 200 C600 240 520 120 600 -20Z" fill="#163420"/>
+    </g>
+
+    <!-- Mid leaves -->
+    <g filter="url(#leafBlur)" opacity="0.5">
+      <!-- Top left cluster -->
+      <path d="M-40 60 C80 -30 240 60 220 200 C200 340 60 330 -40 60Z" fill="#1a4028"/>
+      <path d="M20 140 C120 50 280 120 270 260 C260 400 100 370 20 140Z" fill="#2a5a3a" opacity="0.8"/>
+      <path d="M-60 200 C30 130 160 190 150 310 C140 430 10 400 -60 200Z" fill="#0d2418"/>
+      <!-- serrated edge effect -->
+      <path d="M60 40 Q90 20 110 50 Q140 10 160 55 Q190 15 210 65 Q200 120 150 140 Q100 120 60 40Z" fill="#3d8a5a" opacity="0.6"/>
+
+      <!-- Top right cluster -->
+      <path d="M1300 20 C1440 80 1480 220 1380 280 C1280 340 1200 220 1300 20Z" fill="#163420"/>
+      <path d="M1360 100 C1480 140 1500 280 1420 320 C1340 360 1280 260 1360 100Z" fill="#2d6a45" opacity="0.7"/>
+      <path d="M1260 0 C1400 40 1420 180 1340 220 C1260 260 1180 160 1260 0Z" fill="#1a4028"/>
+
+      <!-- Bottom left -->
+      <path d="M-20 680 C100 580 260 640 250 800 C240 960 80 940 -20 680Z" fill="#2d6a45"/>
+      <path d="M40 760 C160 660 300 720 290 870 C280 1020 120 1000 40 760Z" fill="#1a4028" opacity="0.7"/>
+
+      <!-- Bottom right -->
+      <path d="M1180 700 C1340 660 1440 800 1380 920 C1320 1040 1160 980 1180 700Z" fill="#163420"/>
+      <path d="M1280 750 C1420 700 1500 840 1460 950 C1420 1060 1260 1000 1280 750Z" fill="#2d6a45" opacity="0.6"/>
+
+      <!-- Center background -->
+      <path d="M580 820 C700 740 840 800 830 940 C820 1080 660 1060 580 820Z" fill="#0d2418" opacity="0.8"/>
+    </g>
+
+    <!-- Sharp foreground leaf accents -->
+    <g opacity="0.7">
+      <!-- Top left sharp leaf -->
+      <path d="M-30 -10 C120 10 200 140 140 260 C80 380 -20 340 -60 180 C-100 20 -30 -10 -30 -10Z" fill="#1a4028"/>
+      <path d="M-30 -10 C-10 80 20 160 80 220 C40 200 -20 160 -60 80Z" fill="#2d6a45" opacity="0.5"/>
+
+      <!-- Top right sharp leaf -->
+      <path d="M1480 -40 C1360 20 1280 160 1340 280 C1400 400 1500 360 1530 200 C1560 40 1480 -40 1480 -40Z" fill="#163420"/>
+      <path d="M1480 -40 C1460 60 1440 140 1380 200 C1420 180 1480 140 1520 60Z" fill="#2a5a3a" opacity="0.5"/>
+
+      <!-- Bottom left accent -->
+      <path d="M-60 820 C80 760 200 840 180 980 C160 1120 20 1100 -60 820Z" fill="#2d6a45"/>
+
+      <!-- Right side accent -->
+      <path d="M1460 500 C1540 420 1620 520 1600 640 C1580 760 1480 740 1460 500Z" fill="#163420"/>
+    </g>
+
+    <!-- Stem lines for botanical feel -->
+    <g stroke="#2d6a45" stroke-width="1" fill="none" opacity="0.25">
+      <path d="M60 260 Q80 200 120 180 M120 180 Q140 160 160 140 M120 180 Q150 185 180 195"/>
+      <path d="M1300 200 Q1340 240 1360 280 M1360 280 Q1380 300 1390 330 M1360 280 Q1340 295 1320 310"/>
+    </g>
+  </svg>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="8" cy="8" r="5.5" stroke="rgba(255,255,255,0.7)" stroke-width="1"/>
+        <path d="M8 4.5v3.5l2 2" stroke="#3dd68c" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    EVA
+  </div>
+  <div class="nav-links">
+    <a href="#workspace">Workspace</a>
+    <a href="#community">Community</a>
+    <a href="#teacher">Educators</a>
+    <a href="#sdg">SDGs</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-token-pill" id="navTokens">
+      <span class="gem-icon">&#9670;</span>
+      <span id="navTokenCount">0</span> tokens
+    </div>
+    <button class="nav-cta">Join the Movement</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <!-- PORTAL CUTOUT — the "clear window" into the foliage -->
+  <div class="hero-portal-wrap">
+    <div class="hero-portal-inner">
+      <svg viewBox="0 0 320 420" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="portalGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2d6a45"/>
+            <stop offset="100%" stop-color="#071a0e"/>
+          </linearGradient>
+        </defs>
+        <rect width="320" height="420" fill="url(#portalGrad)"/>
+        <!-- Close-up leaf forms inside portal -->
+        <path d="M-20 60 C80 0 220 80 200 220 C180 360 40 350 -20 60Z" fill="#3d8a5a" opacity="0.8"/>
+        <path d="M60 -20 C200 20 260 160 220 280 C180 400 80 370 60 -20Z" fill="#1a4028"/>
+        <path d="M160 100 C280 60 340 200 300 320 C260 440 160 400 160 100Z" fill="#163420"/>
+        <!-- vein details -->
+        <path d="M80 80 Q120 140 100 220 M100 140 Q130 150 160 145 M100 170 Q125 175 150 172" stroke="#4a9a65" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <path d="M200 60 Q220 130 210 220 M210 120 Q235 128 258 126 M210 155 Q232 161 252 160" stroke="#2d6a45" stroke-width="1" fill="none" opacity="0.5"/>
+        <!-- bright veins -->
+        <path d="M120 200 Q150 280 140 370 M138 260 Q162 268 182 265" stroke="#6ba882" stroke-width="0.8" fill="none" opacity="0.4"/>
+        <!-- serrated edge at bottom -->
+        <path d="M0 380 Q20 370 30 380 Q50 365 60 378 Q80 362 90 376 Q110 358 120 374 Q140 355 150 372 Q170 352 180 370 Q200 348 210 368 Q230 345 240 365 Q260 342 270 362 Q290 338 300 358 Q320 335 320 420 L0 420Z" fill="#0d2418" opacity="0.9"/>
+        <!-- light shimmer -->
+        <ellipse cx="160" cy="150" rx="60" ry="80" fill="white" opacity="0.04"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      AI Ethical Intelligence v2.0
+    </div>
+    <h1 class="hero-h1">Think <em>Responsibly,</em><br>Act Ethically.</h1>
+    <p class="hero-sub">EVA transforms powerful AI into responsible AI — teaching students to question bias, protect the planet, and build a more equitable world.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('workspace').scrollIntoView({behavior:'smooth'})">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M5 7l1.5 1.5L9 5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Start Exploring
+      </button>
+      <button class="btn-secondary">Watch Overview</button>
+    </div>
+  </div>
+
+  <div class="trust-strip">
+    <span class="trust-label">Trusted by schools worldwide</span>
+    <div class="trust-logos">
+      <span class="trust-logo">EduNet</span>
+      <span class="trust-logo">SchoolsAI</span>
+      <span class="trust-logo">UNESCO</span>
+      <span class="trust-logo">OpenLearn</span>
+      <span class="trust-logo">EthicEd</span>
+    </div>
+  </div>
+</section>
+
+<!-- WORKSPACE -->
+<section id="workspace">
+<div style="padding:100px 48px;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="margin-bottom:44px;">
+      <span class="section-label">Three-Layer AI System</span>
+      <h2 class="section-h2">The Ethical <em>Workspace</em></h2>
+      <p class="section-p">Every prompt is analyzed for bias, ecological cost, and learning potential — in real time.</p>
+    </div>
+    <div class="workspace-grid">
+
+      <!-- LEFT -->
+      <div class="glass-card layer-panel">
+        <div class="layer-title">Active Layers</div>
+        <div class="layer-item active" id="l1-tab" onclick="switchLayer(1)">
+          <div class="li-num">Layer 01</div>
+          <div class="li-name">Bias-Aware</div>
+          <div class="li-desc">Stereotype detection &amp; shield</div>
+        </div>
+        <div class="layer-item" id="l2-tab" onclick="switchLayer(2)">
+          <div class="li-num">Layer 02</div>
+          <div class="li-name">Socratic Mode</div>
+          <div class="li-desc">Guided learning, not answers</div>
+        </div>
+        <div class="layer-item" id="l3-tab" onclick="switchLayer(3)">
+          <div class="li-num">Layer 03</div>
+          <div class="li-name">Eco-Indicator</div>
+          <div class="li-desc">Digital footprint awareness</div>
+        </div>
+        <div class="eco-block" id="biasGauge" style="background:rgba(192,132,252,0.05);border-color:rgba(192,132,252,0.12);">
+          <div class="eco-label-row">
+            <span class="eco-lbl">Bias Level</span>
+            <span class="eco-status-text" id="biasText" style="color:var(--teal)">Clear</span>
+          </div>
+          <div class="eco-track"><div class="eco-fill" id="biasFill" style="background:var(--teal);"></div></div>
+        </div>
+        <div class="eco-block">
+          <div class="eco-label-row">
+            <span class="eco-lbl">Energy Use</span>
+            <span class="eco-status-text" id="ecoText" style="color:var(--teal)">Low</span>
+          </div>
+          <div class="eco-track"><div class="eco-fill" id="ecoFill"></div></div>
+        </div>
+      </div>
+
+      <!-- CENTER: Chat -->
+      <div class="glass-card chat-panel">
+        <div class="chat-topbar">
+          <div class="chat-title-row">
+            <div class="eva-orb"></div>
+            <div><div class="chat-eva-name">EVA Assistant</div></div>
+          </div>
+          <div class="chat-mode-badge" id="chatModeBadge">Standard Mode</div>
+        </div>
+        <div class="chat-msgs" id="chatMsgs">
+          <div class="msg eva">
+            <div class="msg-avatar">E</div>
+            <div class="msg-bubble">Hello! I am EVA, your Ethical AI Assistant. Ask me anything — I will help you think critically, learn deeply, and act responsibly.</div>
+          </div>
+        </div>
+        <div id="biasAlert" class="bias-alert">
+          <div class="bias-alert-top">
+            <div class="bias-dot"></div>
+            <span class="bias-lbl">Stereotype Shield Activated</span>
+          </div>
+          <div class="bias-phrase" id="biasPhraseText">Detected pattern.</div>
+          <button class="bias-submit-btn" id="biasSubmitBtn">+ Submit to Community Shield Board</button>
+        </div>
+        <div id="socraticPanel" class="socratic-panel">
+          <div class="soc-title">Socratic Guidance Mode — Let us think together</div>
+          <div class="soc-step"><div class="soc-num">1</div><div class="soc-text">What do you already know about this topic? Start there.</div></div>
+          <div class="soc-step"><div class="soc-num">2</div><div class="soc-text">What specific part is unclear? Break it into one question at a time.</div></div>
+          <div class="soc-step"><div class="soc-num">3</div><div class="soc-text">Find one reliable source and tell me what it says. We will build from there.</div></div>
+          <div class="soc-step"><div class="soc-num">4</div><div class="soc-text">Form your own argument first. I will help you refine it — not write it for you.</div></div>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" id="chatInput" type="text" placeholder="Ask EVA anything..." autocomplete="off"/>
+          <button class="chat-send-btn" onclick="sendMessage()">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 8L14 2L8 14L7 9L2 8Z" stroke="rgba(255,255,255,0.8)" stroke-width="1.4" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Tokens -->
+      <div class="glass-card token-panel">
+        <div class="tp-title">Ethical Tokens</div>
+        <div class="token-count-row">
+          <div class="token-big" id="tokenBig">0</div>
+          <div class="token-unit">gems</div>
+        </div>
+        <div class="token-gems" id="tokenGems"></div>
+        <div class="tp-title" style="margin-top:14px;">Token History</div>
+        <div class="token-log" id="tokenLog">
+          <div class="tl-item" style="font-style:italic;">No tokens yet. Interact ethically to earn gems.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- COMMUNITY -->
+<section id="community">
+  <div class="community-inner">
+    <span class="section-label">Global Impact Hub</span>
+    <h2 class="section-h2">The Community <em>in Action</em></h2>
+    <div class="stats-grid">
+      <div class="glass-card stat-card">
+        <div class="stat-val" id="carbonStat">0</div>
+        <div class="stat-lbl">kg Carbon Saved</div>
+        <div class="stat-change">+12% this week</div>
+      </div>
+      <div class="glass-card stat-card">
+        <div class="stat-val" id="biasesStat">0</div>
+        <div class="stat-lbl">Biases Challenged</div>
+        <div class="stat-change">+34 today</div>
+      </div>
+      <div class="glass-card stat-card">
+        <div class="stat-val" id="queriesStat">0</div>
+        <div class="stat-lbl">Ethical Queries Today</div>
+        <div class="stat-change">Live count</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:10px;"><span class="section-label">Safe Space Library</span></div>
+    <div class="library-grid">
+      <div class="glass-card lib-card"><span class="lib-tag bias">Bias</span><div class="lib-h">Why "boys are better at math" is statistically false</div><div class="lib-p">Research from 67 countries shows no significant gender gap when access is equal. The gap is cultural, not cognitive.</div><div class="lib-meta"><span class="lib-author">Amara K. — Grade 11</span><span class="lib-likes">142 found helpful</span></div></div>
+      <div class="glass-card lib-card"><span class="lib-tag eco">Eco</span><div class="lib-h">Shorter prompts, smaller footprint</div><div class="lib-p">A precise 20-word prompt uses up to 60% less compute energy than a vague 100-word one. Clarity is sustainability.</div><div class="lib-meta"><span class="lib-author">Lior B. — Grade 10</span><span class="lib-likes">98 found helpful</span></div></div>
+      <div class="glass-card lib-card"><span class="lib-tag ethic">Ethics</span><div class="lib-h">AI does not have opinions — it reflects ours</div><div class="lib-p">Language models learn from human text. Every bias in training data is a bias we put there. We are responsible.</div><div class="lib-meta"><span class="lib-author">Zara M. — Grade 12</span><span class="lib-likes">217 found helpful</span></div></div>
+      <div class="glass-card lib-card"><span class="lib-tag bias">Bias</span><div class="lib-h">Emotional labor is not a "female trait"</div><div class="lib-p">Expecting women to manage social harmony is a structural bias, not a natural tendency. Names matter in AI prompts.</div><div class="lib-meta"><span class="lib-author">Priya N. — Grade 11</span><span class="lib-likes">88 found helpful</span></div></div>
+      <div class="glass-card lib-card"><span class="lib-tag eco">Eco</span><div class="lib-h">One AI image costs 10x more energy than one AI sentence</div><div class="lib-p">Generative image models consume significantly more compute than text. Choosing the right tool is ecological responsibility.</div><div class="lib-meta"><span class="lib-author">Kai T. — Grade 9</span><span class="lib-likes">134 found helpful</span></div></div>
+      <div class="glass-card lib-card"><span class="lib-tag ethic">Ethics</span><div class="lib-h">Asking "why" is more powerful than asking "what"</div><div class="lib-p">Socratic prompting — asking for reasoning rather than answers — builds real understanding and reduces academic dishonesty.</div><div class="lib-meta"><span class="lib-author">Sofia R. — Grade 12</span><span class="lib-likes">203 found helpful</span></div></div>
+    </div>
+
+    <div class="misconceptions-board glass-card" id="misconceptionsBoard">
+      <div class="mb-title">Community Stereotype Shield Board</div>
+      <div class="mb-sub">Anonymous bias reports submitted by the community — shared so we all learn.</div>
+      <div class="mb-items" id="mbItems"><span class="mb-empty">No reports yet. Be the first to challenge a stereotype.</span></div>
+    </div>
+
+    <div class="leaderboard" style="margin-top:44px;">
+      <span class="section-label">Responsible User Leaderboard</span>
+      <h3 class="section-h2" style="font-size:1.8rem;margin-bottom:22px;">Ethics <em>Rankings</em></h3>
+      <div id="leaderboardList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEACHER -->
+<section id="teacher">
+  <div class="teacher-inner">
+    <span class="section-label">Educator Access</span>
+    <h2 class="section-h2">Teacher-in-the-<em>Loop</em></h2>
+    <p class="section-p">Privacy-safe aggregate analytics to help educators understand where students struggle — and where AI helps learning rather than replacing it.</p>
+    <div id="teacherLock">
+      <div class="teacher-lock glass-card" style="padding:30px;border-radius:18px;">
+        <div class="lock-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+            <rect x="4" y="10" width="14" height="10" rx="3" stroke="rgba(255,255,255,0.5)" stroke-width="1.3"/>
+            <path d="M7.5 10V7.5a3.5 3.5 0 017 0V10" stroke="rgba(255,255,255,0.5)" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="11" cy="15" r="1.5" fill="rgba(255,255,255,0.5)"/>
+          </svg>
+        </div>
+        <div class="lock-label">Enter Educator Access Code</div>
+        <input class="lock-input" id="lockInput" type="password" placeholder="* * * * * * * *" onkeydown="if(event.key==='Enter')unlockDash()"/>
+        <button class="btn-primary" style="width:100%;justify-content:center;" onclick="unlockDash()">Unlock Dashboard</button>
+        <div class="lock-hint" style="margin-top:10px;">Demo code: teach2024</div>
+      </div>
+    </div>
+    <div class="teacher-dash" id="teacherDash">
+      <div class="dash-stats">
+        <div class="glass-card dash-stat"><div class="ds-val">847</div><div class="ds-lbl">Active Students</div></div>
+        <div class="glass-card dash-stat"><div class="ds-val">68%</div><div class="ds-lbl">Chose Guidance Mode</div></div>
+        <div class="glass-card dash-stat"><div class="ds-val">213</div><div class="ds-lbl">Biases Flagged</div></div>
+        <div class="glass-card dash-stat"><div class="ds-val">4.2t</div><div class="ds-lbl">CO2 Saved (est.)</div></div>
+      </div>
+      <div class="glass-card heatmap-wrap">
+        <div class="hm-title">Learning vs. Copying Pressure — Subject Heatmap (5 weeks)</div>
+        <div class="hm-grid" id="heatmapGrid"></div>
+        <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;">
+          <span style="font-size:0.66rem;color:var(--text-dim);">Scale:</span>
+          <span style="font-size:0.66rem;padding:2px 9px;border-radius:5px;" class="hm-l1">Very Low</span>
+          <span style="font-size:0.66rem;padding:2px 9px;border-radius:5px;" class="hm-l2">Low</span>
+          <span style="font-size:0.66rem;padding:2px 9px;border-radius:5px;" class="hm-l3">Moderate</span>
+          <span style="font-size:0.66rem;padding:2px 9px;border-radius:5px;" class="hm-l4">High</span>
+          <span style="font-size:0.66rem;padding:2px 9px;border-radius:5px;" class="hm-l5">Critical</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="sdg">
+  <div class="footer-bg"></div>
+  <div class="footer-hills">
+    <svg viewBox="0 0 1440 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="fh1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a4028" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#050e08"/>
+        </linearGradient>
+        <linearGradient id="fh2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0d2418" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#020a05"/>
+        </linearGradient>
+      </defs>
+      <circle cx="80" cy="35" r="0.8" fill="white" opacity="0.3"/>
+      <circle cx="320" cy="18" r="1" fill="white" opacity="0.4"/>
+      <circle cx="640" cy="44" r="0.7" fill="white" opacity="0.28"/>
+      <circle cx="900" cy="22" r="1.2" fill="white" opacity="0.35"/>
+      <circle cx="1180" cy="38" r="0.8" fill="white" opacity="0.3"/>
+      <circle cx="1360" cy="12" r="1" fill="white" opacity="0.4"/>
+      <circle cx="480" cy="28" r="0.6" fill="white" opacity="0.25"/>
+      <circle cx="780" cy="10" r="0.8" fill="white" opacity="0.32"/>
+      <circle cx="1080" cy="60" r="22" fill="#fef9ec" opacity="0.06"/>
+      <circle cx="1080" cy="60" r="14" fill="#fef9ec" opacity="0.1"/>
+      <circle cx="1080" cy="60" r="7" fill="#fef9ec" opacity="0.2"/>
+      <path d="M0 200 Q200 100 400 155 Q600 80 800 135 Q1000 75 1200 115 Q1350 95 1440 125 L1440 400 L0 400Z" fill="url(#fh1)"/>
+      <path d="M0 270 Q180 195 360 240 Q540 175 720 225 Q900 185 1080 230 Q1260 192 1440 228 L1440 400 L0 400Z" fill="url(#fh2)"/>
+      <g fill="#050e08" opacity="0.8">
+        <polygon points="72,258 86,294 58,294"/><polygon points="72,240 90,273 54,273"/>
+        <polygon points="100,266 112,298 88,298"/><polygon points="100,249 116,280 84,280"/>
+        <polygon points="1322,262 1336,296 1308,296"/><polygon points="1322,244 1338,276 1306,276"/>
+        <polygon points="1350,268 1362,300 1338,300"/>
+      </g>
+    </svg>
+  </div>
+  <div class="footer-content">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">EVA</div>
+        <div class="footer-tagline">Ethical &amp; Feminist AI Assistant. Building responsible AI culture in schools worldwide — one ethical interaction at a time.</div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-title">Platform</div>
+          <a href="#">About EVA</a><a href="#">Workspace</a><a href="#">Community</a><a href="#">For Educators</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Resources</div>
+          <a href="#">Research</a><a href="#">Documentation</a><a href="#">API Access</a><a href="#">Bias Database</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Contact</div>
+          <a href="#">Get in touch</a><a href="#">Partner Schools</a><a href="#">Press Kit</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom:36px;">
+      <div class="footer-col-title" style="margin-bottom:14px;">Aligned with UN Sustainable Development Goals</div>
+      <div class="sdg-row">
+        <div class="sdg-card sdg4"><div class="sdg-num">4</div><div class="sdg-text">Quality Education</div></div>
+        <div class="sdg-card sdg5"><div class="sdg-num">5</div><div class="sdg-text">Gender Equality</div></div>
+        <div class="sdg-card sdg12"><div class="sdg-num">12</div><div class="sdg-text">Responsible Consumption</div></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">2026 EVA Global Ethical Hub. All rights reserved.</div>
+      <div class="footer-privacy">
+        <a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Ethical Charter</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="biasModal">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+        <path d="M11 3L13.5 8.5H19L14.5 12L16.5 18L11 14.5L5.5 18L7.5 12L3 8.5H8.5L11 3Z" stroke="var(--purple)" stroke-width="1.3" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="modal-h">Submit to Shield Board?</div>
+    <p class="modal-p">This phrase will be anonymously shared with the school community as an educational example of a common stereotype.</p>
+    <div class="modal-phrase" id="modalPhrase"></div>
+    <p class="modal-p" style="font-size:0.76rem;margin-bottom:20px;">No personal information is attached. You earn +1 Ethical Token for contributing.</p>
+    <div class="modal-btns">
+      <button class="modal-confirm" onclick="confirmBiasSubmit()">Submit Anonymously</button>
+      <button class="modal-cancel" onclick="closeBiasModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ECO BANNER -->
+<div id="eco-banner">
+  <div class="eco-banner-dot"></div>
+  <span id="eco-banner-text"></span>
+  <button onclick="this.parentElement.classList.remove('show')" style="margin-left:auto;background:none;border:none;cursor:pointer;color:inherit;font-size:1rem;opacity:0.6;">x</button>
+</div>
+
+<script>
+let tokenCount = 0;
+let currentBiasPhrase = '';
+let mbItems = [];
+
+function addToken(reason, pts) {
+  tokenCount += pts;
+  document.getElementById('tokenBig').textContent = tokenCount;
+  document.getElementById('navTokenCount').textContent = tokenCount;
+  const gemsEl = document.getElementById('tokenGems');
+  const gem = document.createElement('div'); gem.className = 'gem';
+  gemsEl.appendChild(gem);
+  const log = document.getElementById('tokenLog');
+  const existing = log.querySelector('[style*="italic"]');
+  if (existing) existing.remove();
+  const item = document.createElement('div'); item.className = 'tl-item';
+  const now = new Date();
+  item.innerHTML = '<span class="tl-pts">+' + pts + '</span> ' + reason + ' <span style="color:var(--text-dim);font-size:0.6rem;">' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0') + '</span>';
+  log.insertBefore(item, log.firstChild);
+}
+
+const biasPatterns = [
+  { rx: /girls? (can'?t|cannot|are bad at|don'?t)/i, label: 'Gender stereotype (ability)' },
+  { rx: /boys? (are better|are smarter|should|don'?t cry)/i, label: 'Gender stereotype (behavior)' },
+  { rx: /women (are too|are weak|can'?t lead|belong)/i, label: 'Sexist generalization' },
+  { rx: /men (don'?t feel|can'?t be|always)/i, label: 'Gender role bias' },
+  { rx: /(gay|lesbian|trans) (people|men|women) (are|always|never)/i, label: 'LGBTQ+ stereotype' },
+  { rx: /emotional (women|girls)|hysterical/i, label: 'Emotional stereotype' },
+];
+const socraticTriggers = /(help me (with|write|do) (my )?assignment|write my essay|do my homework|write a (full|complete) answer for me)/i;
+
+function appendMsg(role, text) {
+  const msgs = document.getElementById('chatMsgs');
+  const div = document.createElement('div'); div.className = 'msg ' + role;
+  div.innerHTML = '<div class="msg-avatar">' + (role==='eva'?'E':'U') + '</div><div class="msg-bubble">' + text + '</div>';
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+}
+
+function switchLayer(n) {
+  [1,2,3].forEach(i => document.getElementById('l'+i+'-tab').classList.toggle('active', i===n));
+}
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim(); if (!text) return;
+  input.value = ''; appendMsg('user', text);
+  document.getElementById('biasAlert').classList.remove('show');
+  document.getElementById('socraticPanel').classList.remove('show');
+
+  const len = text.length;
+  const ecoFill = document.getElementById('ecoFill');
+  const ecoText = document.getElementById('ecoText');
+  const ecoBanner = document.getElementById('eco-banner');
+  const ecoW = Math.min(100, Math.round(len/2.5));
+  ecoFill.style.width = ecoW + '%';
+
+  if (ecoW < 35) {
+    ecoFill.style.background = 'var(--teal)'; ecoText.textContent = 'Low'; ecoText.style.color = 'var(--teal)';
+    document.body.classList.remove('eco-warn','eco-dim'); ecoBanner.classList.remove('show','warn','crit');
+    addToken('Efficient prompt — Low energy', 1);
+  } else if (ecoW < 70) {
+    ecoFill.style.background = '#fbbf24'; ecoText.textContent = 'Medium'; ecoText.style.color = '#fbbf24';
+    document.body.classList.add('eco-warn'); document.body.classList.remove('eco-dim');
+    ecoBanner.className = 'eco-banner show warn';
+    document.getElementById('eco-banner-text').textContent = 'Medium energy prompt. Consider refining for a smaller digital footprint (SDG 12).';
+    setTimeout(()=>ecoBanner.classList.remove('show'), 6000);
+  } else {
+    ecoFill.style.background = '#ef4444'; ecoText.textContent = 'High'; ecoText.style.color = '#ef4444';
+    document.body.classList.remove('eco-warn'); document.body.classList.add('eco-dim');
+    ecoBanner.className = 'eco-banner show crit';
+    document.getElementById('eco-banner-text').textContent = 'High energy use! EVA is dimming its visuals to reflect your digital footprint (SDG 12).';
+    setTimeout(()=>{ecoBanner.classList.remove('show');document.body.classList.remove('eco-dim');},9000);
+  }
+
+  let biasFound = null;
+  for (const p of biasPatterns) { if (p.rx.test(text)) { biasFound = p; break; } }
+  const biasFill = document.getElementById('biasFill');
+  const biasTextEl = document.getElementById('biasText');
+
+  if (biasFound) {
+    switchLayer(1); currentBiasPhrase = text;
+    document.getElementById('biasPhraseText').textContent = '"' + text + '" — ' + biasFound.label;
+    document.getElementById('biasAlert').classList.add('show');
+    biasFill.style.width = '90%'; biasFill.style.background = 'var(--purple)';
+    biasTextEl.textContent = 'Detected'; biasTextEl.style.color = 'var(--purple)';
+    document.getElementById('chatModeBadge').textContent = 'Bias Shield Active';
+    appendMsg('eva', 'I detected a stereotype in that phrasing. This type of generalization harms people by reducing them to assumed traits. Would you like to explore where this belief comes from — and why research challenges it?');
+    return;
+  } else {
+    biasFill.style.width = '5%'; biasFill.style.background = 'var(--teal)';
+    biasTextEl.textContent = 'Clear'; biasTextEl.style.color = 'var(--teal)';
+  }
+
+  if (socraticTriggers.test(text)) {
+    switchLayer(2);
+    document.getElementById('socraticPanel').classList.add('show');
+    document.getElementById('chatModeBadge').textContent = 'Socratic Mode';
+    appendMsg('eva', 'I am switching to Socratic Mode. Instead of giving you the answer, I want to help you discover it yourself. Follow the guidance steps above — you will learn far more this way.');
+    addToken('Chose Guidance Mode', 2); return;
+  }
+
+  document.getElementById('chatModeBadge').textContent = 'Standard Mode';
+  const responses = [
+    'That is a thoughtful question. Let me reflect it back: what assumptions might be hidden in how you framed it? Examining our own questions is the first step to critical thinking.',
+    'Before I answer, I want you to consider: whose perspective might be missing from this question? Ethical AI means looking at all sides.',
+    'Great question. The responsible approach here is to acknowledge uncertainty. Here is what is well-evidenced — and here is what remains open to interpretation.',
+    'I notice this topic connects to SDG 4 — quality education. Let me guide you toward primary sources rather than just give you my summary.',
+    'This is exactly the kind of question where I want to help you think, not just inform you. What do you already know? Let us start there.',
+  ];
+  setTimeout(() => appendMsg('eva', responses[Math.floor(Math.random()*responses.length)]), 600);
+  const qs = document.getElementById('queriesStat');
+  qs.textContent = (parseInt(qs.textContent.replace(/,/g,''))||0) + 1;
+}
+
+document.getElementById('chatInput').addEventListener('keydown', e => { if(e.key==='Enter') sendMessage(); });
+
+document.getElementById('biasSubmitBtn').addEventListener('click', () => {
+  document.getElementById('modalPhrase').textContent = '"' + currentBiasPhrase + '"';
+  document.getElementById('biasModal').classList.add('show');
+});
+function closeBiasModal() { document.getElementById('biasModal').classList.remove('show'); }
+function confirmBiasSubmit() {
+  const items = document.getElementById('mbItems');
+  const empty = items.querySelector('.mb-empty'); if (empty) empty.remove();
+  const tag = document.createElement('span'); tag.className = 'mb-tag';
+  tag.textContent = currentBiasPhrase.length > 40 ? currentBiasPhrase.slice(0,40)+'...' : currentBiasPhrase;
+  items.appendChild(tag); mbItems.push(currentBiasPhrase);
+  closeBiasModal(); document.getElementById('biasAlert').classList.remove('show');
+  addToken('Reported bias to Shield Board', 3);
+  const bs = document.getElementById('biasesStat');
+  bs.textContent = (parseInt(bs.textContent.replace(/,/g,''))||0) + 1;
+}
+document.getElementById('biasModal').addEventListener('click', e => { if(e.target===document.getElementById('biasModal')) closeBiasModal(); });
+
+function unlockDash() {
+  const code = document.getElementById('lockInput').value;
+  if (code === 'teach2024') {
+    document.getElementById('teacherLock').style.display = 'none';
+    document.getElementById('teacherDash').classList.add('show');
+    buildHeatmap();
+  } else {
+    document.getElementById('lockInput').style.borderColor = '#ef4444';
+    document.getElementById('lockInput').style.boxShadow = '0 0 0 3px rgba(239,68,68,0.1)';
+    setTimeout(() => { document.getElementById('lockInput').style.borderColor=''; document.getElementById('lockInput').style.boxShadow=''; }, 1500);
+  }
+}
+
+function buildHeatmap() {
+  const subjects = ['Mathematics','English','Science','History','Computing'];
+  const weeks = ['Wk 1','Wk 2','Wk 3','Wk 4','Wk 5'];
+  const data = [[1,2,3,2,1],[3,4,4,5,3],[1,1,2,1,2],[2,3,3,4,4],[1,2,3,3,4]];
+  const classes = ['','hm-l1','hm-l2','hm-l3','hm-l4','hm-l5'];
+  const grid = document.getElementById('heatmapGrid'); grid.innerHTML = '';
+  const emptyH = document.createElement('div'); emptyH.className = 'hm-cell hm-label'; grid.appendChild(emptyH);
+  weeks.forEach(w => { const h=document.createElement('div'); h.className='hm-cell hm-header'; h.textContent=w; grid.appendChild(h); });
+  subjects.forEach((s,si) => {
+    const lbl=document.createElement('div'); lbl.className='hm-cell hm-label'; lbl.textContent=s; grid.appendChild(lbl);
+    data[si].forEach(v => { const cell=document.createElement('div'); cell.className='hm-cell '+classes[v]; cell.textContent=['','Very Low','Low','Moderate','High','Critical'][v]; grid.appendChild(cell); });
+  });
+}
+
+function animateCount(el, target) {
+  let cur = 0; const step = Math.ceil(target/60);
+  const t = setInterval(() => {
+    cur = Math.min(cur+step, target);
+    el.textContent = cur.toLocaleString();
+    if (cur >= target) clearInterval(t);
+  }, 25);
+}
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCount(document.getElementById('carbonStat'), 2847);
+      animateCount(document.getElementById('biasesStat'), 1234);
+      animateCount(document.getElementById('queriesStat'), 9821);
+      observer.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+observer.observe(document.getElementById('community'));
+
+const leaders = [
+  { name: 'Amara K.', detail: 'Bias Reports: 14 · Efficient Prompts: 47', score: 342, bar: 100 },
+  { name: 'Lior B.', detail: 'Guidance Mode: 23 · Eco Saves: 38', score: 289, bar: 84 },
+  { name: 'Zara M.', detail: 'Bias Reports: 9 · Efficient Prompts: 61', score: 261, bar: 76 },
+  { name: 'Priya N.', detail: 'Guidance Mode: 18 · Eco Saves: 29', score: 198, bar: 58 },
+  { name: 'Kai T.', detail: 'Bias Reports: 6 · Efficient Prompts: 44', score: 167, bar: 49 },
+];
+const lb = document.getElementById('leaderboardList');
+leaders.forEach((l,i) => {
+  const div = document.createElement('div');
+  div.className = 'lb-item' + (i===0?' top1':'');
+  div.innerHTML = '<div class="lb-rank">'+(i+1)+'</div>'+
+    '<div class="lb-avatar">'+l.name.split(' ').map(x=>x[0]).join('')+'</div>'+
+    '<div class="lb-info"><div class="lb-name">'+l.name+'</div><div class="lb-detail">'+l.detail+'</div></div>'+
+    '<div class="lb-score-wrap"><div class="lb-score">'+l.score+'</div><div class="lb-bar-wrap"><div class="lb-bar" style="width:'+l.bar+'%"></div></div></div>';
+  lb.appendChild(div);
+});
+</script>
+</body>
+</html>
+```
